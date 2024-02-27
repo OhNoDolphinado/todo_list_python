@@ -22,5 +22,3 @@ with open("todo_list.csv", mode='r+') as todo_list_file:
     writer = csv.DictWriter(todo_list_file, delimiter=",", escapechar="\n")
     
     # writer.writerow({"task_name" : "Code project", "rating" : "4", "body_text" : "stop being lazy and code"})
-    
-#sjdghkjds
