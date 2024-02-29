@@ -9,7 +9,7 @@ TODO:
    - by name, alphabetically
    - by "star" rating
    - by task length(?)
-- Clean data as it enters (escape chars on commas, etc)
+- Clean data as it enters (escape chars on commas, etc) (inside addItem())
 
 TO GET CREDIT:
 - Write a sorting algorithm that takes in a list of lists and returns a sorted list of lists
@@ -42,6 +42,8 @@ def addItem():
             print("Provide an integer from 1 to 5.")
     
     descripton = input("Description: ")
+    
+    # need to actually add it to the dataframe lmao
     
 def removeItem():
     print('remove item')
