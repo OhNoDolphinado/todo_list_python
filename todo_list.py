@@ -3,13 +3,13 @@
 '''
 TODO:
 - View list (done)
-- Add items
+- Add items (done)
 - Remove items
 - Sort items
    - by name, alphabetically
    - by "star" rating
    - by task length(?)
-- Clean data as it enters (escape chars on commas, etc) (inside addItem())
+- Clean data as it enters (escape chars on commas, etc) (inside addItem()) (not needed)
 
 TO GET CREDIT:
 - Write a sorting algorithm that takes in a list of lists and returns a sorted list of lists
@@ -28,9 +28,23 @@ def printList():
         print(f"{stars}{spaces} | {row[0]} | {row[2]}")
     print("")
         
+class NameValidationError(Exception): # for use in addItem()
+    pass
+
+def checkItemAlreadyInColumn(name, index): # does this return true if the name is in the column?
+    return name in todoDataframe[index]
+
 def addItem():
-    taskName = input("Task name: ")
-    
+    taskName = ""
+    while taskName == "":
+        try:
+            tempTaskName = input("Task name: ")
+            if 1 == 1: # use checkItemAlreadyInColumn()
+                raise NameValidationError
+            taskName = tempTaskName
+        except NameValidationError:
+            print("Please use a name not already in use.")
+            
     rating = -1
     while rating == -1:
         try:
@@ -43,13 +57,25 @@ def addItem():
     
     descripton = input("Description: ")
     
-    # need to actually add it to the dataframe lmao
+    answers = [taskName, rating, descripton]
+    
+    todoDataframe.loc[len(todoDataframe)] = answers
     
 def removeItem():
-    print('remove item')
+    '''
+    ask for name of item
+    '''
 
+def sortList(sortingParameter):
+    '''
+    input is what you're sorting for
+    turn dataframe into 2d array 
+    bubblesort 2d array
+    turn 2d array into dataframe
+    '''
 
 try:
+    
     todoDataframe = pd.read_csv('todo.csv')
     
     while True:
@@ -66,4 +92,5 @@ try:
             print("Invalid command.")
         
 except KeyboardInterrupt:
+    todoDataframe = todoDataframe.to_csv('todo.csv', index=False)
     print("\nClosing program.")
