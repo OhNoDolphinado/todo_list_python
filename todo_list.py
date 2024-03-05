@@ -2,14 +2,17 @@
 
 '''
 TODO:
-- check pandas header, add header if not present (done)
+- Check pandas header, add header if not present (done)
 - View list (done)
 - Add items (done)
-- Remove items
+- Remove items (done)
 - Sort items
    - by name, alphabetically
    - by "star" rating
    - by task length(?)
+   - by tags
+- Add / remove tags -- a cell that's a list of tags
+   - Adding a tag means iterating over the list and editing the list
 - Clean data as it enters (escape chars on commas, etc) (inside addItem()) (not needed)
 
 TO GET CREDIT:
@@ -26,13 +29,12 @@ def fixHeader(headers):
     todoDataframe.columns = headers
 
 def printList():
-    
     print("\nTodo list:\n----------")
     for row in todoDataframe.values:
         starCount = int(row[1])
         stars = starCount * "★"
         spaces = (5-starCount) * " "
-        print(f"{stars}{spaces} | {row[0]} | {row[2]}")
+        print(f"{stars}{spaces} | {row[0]} | {row[2]} | TAGS: {row[3]}")
     print("")
         
 class NameValidationError(Exception): # custom error for use in addItem()
@@ -64,34 +66,35 @@ def addItem():
     
     descripton = input("Description: ")
     
-    answers = [taskName, rating, descripton]
+    answers = [taskName, rating, descripton, []]
     
     todoDataframe.loc[len(todoDataframe)] = answers
     
 def removeItem():
+    global todoDataframe # needed to edit todoDataFrame value
+    
     itemToDelete = input("Name of item to delete: ")
-    print(todoDataframe[todoDataframe["task_name"] != itemToDelete]) # why the fuck
-    # todoDataframe = todoDataframe[todoDataframe["task_name"] != itemToDelete]
+    todoDataframe = todoDataframe[todoDataframe["task_name"] != itemToDelete]
 
-def sortList(sortingParameter):
-    '''
-    input is what you're sorting for
-    turn dataframe into 2d array 
-    bubblesort 2d array
-    turn 2d array into dataframe
-    '''
+def sortList():
+    global todoDataframe # needed to edit todoDataFrame value
+    
+    sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating', 'length')\n")
+
+def editTags():
+    ''''''
 
 try:
     
     todoDataframe = pd.read_csv('todo.csv')
     
-    headers = ["task_name", "rating", "body_text"]
+    headers = ["task_name", "rating", "body_text", "tags"]
     
     if(isHeaderCorrect(headers) == False):
         fixHeader(headers)
     
     while True:
-        task = input("Type 'view' to see your to-do list. Type 'add' to add a task. Type 'delete' to remove a task.\n")
+        task = input("Type 'view' to see your to-do list. Type 'add' to add a task. Type 'delete' to remove a task. Type 'sort' to sort the list. Type 'tags' to edit tags.\n")
         task = task.lower()
         
         if task == "view":
@@ -100,6 +103,10 @@ try:
             addItem()
         elif task == "delete":
             removeItem()
+        elif task == "sort":
+            sortList()
+        elif task == "tags":
+            editTags()
         else:
             print("Invalid command.")
         

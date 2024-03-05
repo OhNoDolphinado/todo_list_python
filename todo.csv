@@ -1,5 +1,6 @@
-task_name,rating,body_text
-Code project,4,stop being lazy and code
-Write task,3,write the task
-Hello,3,World
-Henlo,3,"World, hello"
+task_name,rating,body_text,tags
+Code project,4,stop being lazy and code,[coding]
+Henlo,3,"World, hello",[greeting]
+Switch keyboard,1,"Your keyboard broke, go fix it",[]
+Very important task,5,This task is very important,"[coding, greeting]"
+Add tags,2,Add tags!!,[]
