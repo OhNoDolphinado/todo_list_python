@@ -2,6 +2,7 @@
 
 '''
 TODO:
+- check pandas header, add header if not present (done)
 - View list (done)
 - Add items (done)
 - Remove items
@@ -18,6 +19,12 @@ TO GET CREDIT:
 
 import pandas as pd
 
+def isHeaderCorrect(headers):
+    return headers == list(todoDataframe.head())
+
+def fixHeader(headers):
+    todoDataframe.columns = headers
+
 def printList():
     
     print("\nTodo list:\n----------")
@@ -28,18 +35,18 @@ def printList():
         print(f"{stars}{spaces} | {row[0]} | {row[2]}")
     print("")
         
-class NameValidationError(Exception): # for use in addItem()
+class NameValidationError(Exception): # custom error for use in addItem()
     pass
 
-def checkItemAlreadyInColumn(name, index): # does this return true if the name is in the column?
-    return name in todoDataframe[index]
+def checkItemAlreadyInColumn(index, name):
+    return name in todoDataframe[index].values
 
 def addItem():
     taskName = ""
     while taskName == "":
         try:
             tempTaskName = input("Task name: ")
-            if 1 == 1: # use checkItemAlreadyInColumn()
+            if checkItemAlreadyInColumn("task_name", tempTaskName):
                 raise NameValidationError
             taskName = tempTaskName
         except NameValidationError:
@@ -62,9 +69,9 @@ def addItem():
     todoDataframe.loc[len(todoDataframe)] = answers
     
 def removeItem():
-    '''
-    ask for name of item
-    '''
+    itemToDelete = input("Name of item to delete: ")
+    print(todoDataframe[todoDataframe["task_name"] != itemToDelete]) # why the fuck
+    # todoDataframe = todoDataframe[todoDataframe["task_name"] != itemToDelete]
 
 def sortList(sortingParameter):
     '''
@@ -77,6 +84,11 @@ def sortList(sortingParameter):
 try:
     
     todoDataframe = pd.read_csv('todo.csv')
+    
+    headers = ["task_name", "rating", "body_text"]
+    
+    if(isHeaderCorrect(headers) == False):
+        fixHeader(headers)
     
     while True:
         task = input("Type 'view' to see your to-do list. Type 'add' to add a task. Type 'delete' to remove a task.\n")
