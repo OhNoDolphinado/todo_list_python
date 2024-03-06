@@ -80,6 +80,27 @@ def sortList():
     global todoDataframe # needed to edit todoDataFrame value
     
     sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating', 'length')\n")
+    match sortingParameter:
+        case "name":
+            ascDesc = askDesc()
+            sortingParameter = "task_name"
+        case "rating":
+            ascDesc = askDesc()
+            sortingParameter = "rating"
+        case "tags":
+            sortingParameter = "length"
+            pass
+    
+    todoDataframe = todoDataframe.sort_values(by=sortingParameter, ascending=ascDesc)
+
+def askDesc():
+    ascDesc = input("Ascending ('asc') or descending ('desc')\n")
+    match ascDesc:
+        case "asc":
+            ascDesc = True
+        case "desc":
+            ascDesc = False
+    return ascDesc
 
 def editTags():
     ''''''
