@@ -7,8 +7,8 @@ TODO:
 - Add items (done)
 - Remove items (done)
 - Sort items
-   - by name, alphabetically
-   - by "star" rating
+   - by name, alphabetically (done)
+   - by "star" rating (done)
    - by task length(?)
    - by tags
 - Add / remove tags -- a cell that's a list of tags
@@ -79,7 +79,7 @@ def removeItem():
 def sortList():
     global todoDataframe # needed to edit todoDataFrame value
     
-    sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating', 'length')\n")
+    sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating', 'length', 'tags')\n")
     match sortingParameter:
         case "name":
             ascDesc = askDesc()
@@ -87,10 +87,16 @@ def sortList():
         case "rating":
             ascDesc = askDesc()
             sortingParameter = "rating"
+        case "length":
+            todoDataframe.sort_values(by=headers[2], key=lambda length: length.str.len()) # this no worky :(
+            return
         case "tags":
-            sortingParameter = "length"
-            pass
-    
+            print("sorting by tags isnt programmed yet lmao")
+            return
+        case _:
+            print("Not a valid sorting type.")
+            return
+
     todoDataframe = todoDataframe.sort_values(by=sortingParameter, ascending=ascDesc)
 
 def askDesc():
