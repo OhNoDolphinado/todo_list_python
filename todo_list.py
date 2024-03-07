@@ -13,7 +13,7 @@ TODO:
 - Add / remove tags
    - Adding a tag means iterating over the list and editing the list
 - Clean data as it enters (escape chars on commas, etc) (inside addItem()) (not needed)
-- Go back and comment everything all pretty-like
+- Go back and comment everything all pretty-like (look at docstrings and type hinting)
 
 '''
 
