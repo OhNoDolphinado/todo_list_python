@@ -1,6 +1,8 @@
 task_name,rating,body_text,tags
-Very important task,5,This task is very important,"[coding, greeting]"
-Switch keyboard,1,"Your keyboard broke, go fix it",[]
-Henlo,3,"World, hello",[greeting]
-Code project,4,stop being lazy and code,[coding]
+Very important task,5,This task is very important,[]
+Code project,4,stop being lazy and code,[]
+Henlo,3,"World, hello",[]
 Add tags,2,Add tags!!,[]
+Switch keyboard,1,"Your keyboard broke, go fix it",[]
+VS your code,2,Use VS to code your code,[]
+Code at home,3,Finish the goddamn project,[]

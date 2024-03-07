@@ -9,14 +9,11 @@ TODO:
 - Sort items
    - by name, alphabetically (done)
    - by "star" rating (done)
-   - by task length(?)
    - by tags
-- Add / remove tags -- a cell that's a list of tags
+- Add / remove tags
    - Adding a tag means iterating over the list and editing the list
 - Clean data as it enters (escape chars on commas, etc) (inside addItem()) (not needed)
-
-TO GET CREDIT:
-- Write a sorting algorithm that takes in a list of lists and returns a sorted list of lists
+- Go back and comment everything all pretty-like
 
 '''
 
@@ -40,7 +37,7 @@ def printList():
 class NameValidationError(Exception): # custom error for use in addItem()
     pass
 
-def checkItemAlreadyInColumn(index, name):
+def itemInColumn(index, name):
     return name in todoDataframe[index].values
 
 def addItem():
@@ -48,7 +45,7 @@ def addItem():
     while taskName == "":
         try:
             tempTaskName = input("Task name: ")
-            if checkItemAlreadyInColumn("task_name", tempTaskName):
+            if itemInColumn("task_name", tempTaskName):
                 raise NameValidationError
             taskName = tempTaskName
         except NameValidationError:
@@ -66,30 +63,26 @@ def addItem():
     
     descripton = input("Description: ")
     
-    answers = [taskName, rating, descripton, []]
+    answers = [taskName, rating, descripton, list("")]
     
     todoDataframe.loc[len(todoDataframe)] = answers
     
 def removeItem():
-    global todoDataframe # needed to edit todoDataFrame value
+    global todoDataframe # required to edit todoDataFrame value
     
     itemToDelete = input("Name of item to delete: ")
     todoDataframe = todoDataframe[todoDataframe["task_name"] != itemToDelete]
 
 def sortList():
-    global todoDataframe # needed to edit todoDataFrame value
+    global todoDataframe # required to edit todoDataFrame value
     
-    sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating', 'length', 'tags')\n")
+    sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating', 'tags')\n")
+    ascDesc = askDesc()
     match sortingParameter:
         case "name":
-            ascDesc = askDesc()
             sortingParameter = "task_name"
         case "rating":
-            ascDesc = askDesc()
             sortingParameter = "rating"
-        case "length":
-            todoDataframe.sort_values(by=headers[2], key=lambda length: length.str.len()) # this no worky :(
-            return
         case "tags":
             print("sorting by tags isnt programmed yet lmao")
             return
@@ -103,13 +96,65 @@ def askDesc():
     ascDesc = input("Ascending ('asc') or descending ('desc')\n")
     match ascDesc:
         case "asc":
-            ascDesc = True
-        case "desc":
             ascDesc = False
+        case "desc":
+            ascDesc = True
     return ascDesc
 
-def editTags():
-    ''''''
+# you should redo this at home lmao
+# first make sure the computer is reading the cell as a list
+
+# THE FUNCTION NEEDS TO:
+# - take an input
+# - have a loop
+# - have a conditional (like an if statement)
+# - have calls that run __different__ parts of the code
+
+# for add:
+# ask two things: name of item to edit, and tags
+# parse tag(s) into list
+# find tags cell in dataframe
+# append new tags to the tags cell
+
+# for remove:
+# ask one thing: name of item to edit
+# find tags cell in dataframe
+# remove tag from the tags cell
+
+# def editTags():
+#     # item = input("Which item would you like to add a tag to?\n")
+#     # if (not(itemInColumn(0, item))): # figure out how to make this ensure the item you're looking for actually exists
+#     #     print("Item not found.")
+#     #     return
+#     task = input("Would you like to add tags ('add'), or remove some ('delete')?\n")
+#     if task == "add":
+#         addRemoveTags("add")
+#     elif task == "delete":
+#         addRemoveTags("delete")
+#     else:
+#         print("Not a valid command.")
+
+# def addRemoveTags(mode):
+#     tagsToBeEdited = input(f"What tags would you like to {mode}? (Delinate with ', ' -- ex. earth, wind, fire)\n")
+#     tagsToBeEdited = tagsToBeEdited.split(", ")
+    
+#     temp2DList = todoDataframe.values
+    
+#     for tag in tagsToBeEdited:
+#         for i in range(len(temp2DList[0])):
+#             temp2DList[i][3] = convertCellToList(temp2DList[i][3])
+#             if (mode == "add"):
+#                 temp2DList[i][3].append(tag)
+#             elif (mode == "delete"):
+#                 temp2DList[i][3].remove(tag)
+#             todoDataframe.iat[i, 3] = temp2DList[i][3] # figure out how to make this copy our new list into the dataframe cell
+    
+# def convertCellToList(item): # converts strings in the csv that should be lists into lists
+#     if isinstance(item, str):
+#         item = item.replace("[", "")
+#         item = item.replace("]", "")
+#         item = item.split(", ")
+#     return item
 
 try:
     
@@ -133,7 +178,7 @@ try:
         elif task == "sort":
             sortList()
         elif task == "tags":
-            editTags()
+            pass
         else:
             print("Invalid command.")
         
