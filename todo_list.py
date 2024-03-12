@@ -46,7 +46,7 @@ def addItem():
         try:
             tempTaskName = input("Task name: ")
             if itemInColumn("task_name", tempTaskName):
-                raise NameValidationError
+                raise NameValidationError()
             taskName = tempTaskName
         except NameValidationError:
             print("Please use a name not already in use.")
@@ -63,7 +63,7 @@ def addItem():
     
     descripton = input("Description: ")
     
-    answers = [taskName, rating, descripton, list("")]
+    answers = [taskName, rating, descripton, []]
     
     todoDataframe.loc[len(todoDataframe)] = answers
     
@@ -100,9 +100,51 @@ def askDesc():
         case "desc":
             ascDesc = True
     return ascDesc
+    
+def tagsToList(): # iterates through dataframe and changes all tag cells to lists
+    global todoDataframe
+    
+    for i in range(len(todoDataframe)):    
+        newCell = todoDataframe.iat[i, 3]
+        newCell = newCell.replace("['", "")
+        newCell = newCell.replace("']", "")
+        newCell = newCell.split("', '")
 
-# you should redo this at home lmao
-# first make sure the computer is reading the cell as a list
+        todoDataframe.iat[i, 3] = newCell
+
+def importTags(): # scrapes through the dataframe and grabs all tags
+
+    tags = []
+    for row in range(len(todoDataframe)):
+        for j in todoDataframe.iat[row, 3]:
+            if j not in tags and j != "[]":
+                tags.append(j)
+    return tags
+
+def editTag(tags):
+    task = input("Type 'create' to make a new tag. Type 'add' to add a tag to an item. Type 'delete' to remove a tag from an item.\n")
+    task = task.lower()
+    
+    tag = input(f"Please type the name of the tag you'd like to {task}:\n")
+    
+    match task:
+            case "create":
+                createTag(tag)
+            case "add":
+                addTag(tag)
+            case "delete":
+                deleteTag(tag)
+            case _:
+                print("Invalid command.")
+            
+def createTag():
+    pass    
+
+def addTag():
+    itemToTag = input("What's the name of the item you'd like to add a tag to?\n")
+
+def deleteTag():
+    pass
 
 # THE FUNCTION NEEDS TO:
 # - take an input
@@ -165,23 +207,28 @@ try:
     if(isHeaderCorrect(headers) == False):
         fixHeader(headers)
     
+    tagsToList()
+    availableTags = importTags()
+    print(availableTags)
+    
     while True:
         task = input("Type 'view' to see your to-do list. Type 'add' to add a task. Type 'delete' to remove a task. Type 'sort' to sort the list. Type 'tags' to edit tags.\n")
         task = task.lower()
         
-        if task == "view":
-            printList()
-        elif task == "add":
-            addItem()
-        elif task == "delete":
-            removeItem()
-        elif task == "sort":
-            sortList()
-        elif task == "tags":
-            pass
-        else:
-            print("Invalid command.")
-        
+        match task:
+            case "view":
+                printList()
+            case "add":
+                addItem()
+            case "delete":
+                removeItem()
+            case "sort":
+                sortList()
+            case "tags":
+                editTag(availableTags)
+            case _:
+                print("Invalid command.")
+                
 except KeyboardInterrupt:
     todoDataframe = todoDataframe.to_csv('todo.csv', index=False)
     print("\nClosing program.")
