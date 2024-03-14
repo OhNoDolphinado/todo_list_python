@@ -10,9 +10,10 @@ TODO:
    - by name, alphabetically (done)
    - by "star" rating (done)
    - by tags
-- Add / remove tags
-   - Adding a tag means iterating over the list and editing the list
-- Clean data as it enters (escape chars on commas, etc) (inside addItem()) (not needed)
+- Editing tags
+   - Add a tag
+   - Remove a tag
+   - Remove all instances of a tag (done)
 - Go back and comment everything all pretty-like (look at docstrings and type hinting)
 
 '''
@@ -136,6 +137,7 @@ def editTag():
                 print("Invalid command.")
 
 def addTag(name, tag):
+    # get cell where task_name == name and column == 3
     pass
 
 def deleteTag(name, tag):
