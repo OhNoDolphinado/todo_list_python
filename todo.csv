@@ -1,9 +1,10 @@
 task_name,rating,body_text,tags
-Very important task,5,This task is very important,['[]']
-Code project,4,stop being lazy and code,"['Hello', 'world']"
-Code at home,3,Finish the goddamn project,['[]']
-Henlo,3,"World, hello",['[]']
-hewwo,3,hewaloew,['[]']
-Add tags,2,Add tags!!,['[]']
-Switch keyboard,1,"Your keyboard broke, go fix it",['[]']
-Heyo,3,Global,['[]']
+Very important task,5,This task is very important,
+Code project,4,stop being lazy and code,['Hello']
+Code at home,3,Finish the goddamn project,['Hello']
+Henlo,3,"World, hello",
+hewwo,3,hewaloew,
+Add tags,2,Add tags!!,['Hello']
+Switch keyboard,1,"Your keyboard broke, go fix it",
+Heyo,3,Global,
+hhello,3,world,
