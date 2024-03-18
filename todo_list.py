@@ -6,10 +6,9 @@ TODO:
 - View list (done)
 - Add items (done)
 - Remove items (done)
-- Sort items
+- Sort items (done)
    - by name, alphabetically (done)
    - by "star" rating (done)
-   - by tags
 - Editing tags
    - Add a tag
    - Remove a tag
@@ -77,16 +76,13 @@ def removeItem():
 def sortList():
     global todoDataframe # required to edit todoDataFrame value
     
-    sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating', 'tags')\n")
+    sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating')\n")
     ascDesc = askDesc()
     match sortingParameter:
         case "name":
             sortingParameter = "task_name"
         case "rating":
             sortingParameter = "rating"
-        case "tags":
-            print("sorting by tags isnt programmed yet lmao")
-            return
         case _:
             print("Not a valid sorting type.")
             return
@@ -138,18 +134,27 @@ def editTag():
 
 def addTag(name, tag):
     # get cell where task_name == name and column == 3
-    pass
+    rowIndex = int(todoDataframe.index[todoDataframe["task_name"] == name].tolist()[0])
+    
+    print("Index: ", rowIndex, " Type: ", type(rowIndex))
+    print(isinstance(todoDataframe.iat[rowIndex, 3], list)) # why is rowIndex, 3 not indexing the correct cell?
+    print(todoDataframe)
 
 def deleteTag(name, tag):
     pass
 
 def purgeTag(tag):
+    tagExists = False # boolean flag for tracking if the tag actually exists
+    
     for i in range(len(todoDataframe)):
         if isinstance(todoDataframe.iat[i, 3], list) and tag in todoDataframe.iat[i, 3]: # checks if cell is a list and has the requested tag
             todoDataframe.iat[i, 3].remove(tag) # remove the tag from the list int the cell
-
+            tagExists = True 
             fixTags(i) # converts None to list at the edited cell for consistency's sake
-
+            
+    if not tagExists:
+        print("Tag not found.")
+        
 # THE FUNCTION NEEDS TO:
 # - take an input
 # - have a loop
