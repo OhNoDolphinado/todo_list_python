@@ -13,8 +13,6 @@ TODO:
    - Add a tag (done)
    - Remove a tag (done)
    - Remove all instances of a tag (done)
-- Go back and comment everything all pretty-like (look at docstrings and type hinting)
-
 '''
 
 import pandas as pd
