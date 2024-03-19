@@ -98,7 +98,7 @@ def askDesc():
             ascDesc = True
     return ascDesc
     
-def fixTags(index): # iterates through dataframe and changes all tag cells to lists
+def fixTag(index): # iterates through dataframe and changes all tag cells to lists
     global todoDataframe
     
     if (isinstance(todoDataframe.iat[index, 3], str)):  
@@ -133,15 +133,33 @@ def editTag():
                 print("Invalid command.")
 
 def addTag(name, tag):
-    # get cell where task_name == name and column == 3
-    rowIndex = int(todoDataframe.index[todoDataframe["task_name"] == name].tolist()[0])
+    try:
+        rowIndex = todoDataframe.index[todoDataframe["task_name"] == name].tolist()[0]
+    except IndexError: # if a name that doesn't exist is passed in
+        print("Invalid name. Please try again.")
+        return
     
-    print("Index: ", rowIndex, " Type: ", type(rowIndex))
-    print(isinstance(todoDataframe.iat[rowIndex, 3], list)) # why is rowIndex, 3 not indexing the correct cell?
-    print(todoDataframe)
+    if isinstance(todoDataframe.iat[rowIndex, 3], list):
+        todoDataframe.iat[rowIndex, 3].append(tag)
+    elif not isinstance(todoDataframe.iat[rowIndex, 3], list):
+        todoDataframe.iat[rowIndex, 3] = [tag]
 
 def deleteTag(name, tag):
-    pass
+    try:
+        rowIndex = todoDataframe.index[todoDataframe["task_name"] == name].tolist()[0]
+    except IndexError: # if a name that doesn't exist is passed in
+        print("Invalid name. Please try again.")
+        return
+    
+    if isinstance(todoDataframe.iat[rowIndex, 3], list):
+        try:
+            todoDataframe.iat[rowIndex, 3].remove(tag)
+        except:
+            print("Tag not found.")
+    else:
+        print("Tag not found.")
+    
+    fixTag(rowIndex)
 
 def purgeTag(tag):
     tagExists = False # boolean flag for tracking if the tag actually exists
@@ -150,7 +168,7 @@ def purgeTag(tag):
         if isinstance(todoDataframe.iat[i, 3], list) and tag in todoDataframe.iat[i, 3]: # checks if cell is a list and has the requested tag
             todoDataframe.iat[i, 3].remove(tag) # remove the tag from the list int the cell
             tagExists = True 
-            fixTags(i) # converts None to list at the edited cell for consistency's sake
+            fixTag(i) # converts None to list at the edited cell for consistency's sake
             
     if not tagExists:
         print("Tag not found.")
@@ -171,7 +189,7 @@ try:
         fixHeader(headers)
     
     for i in range(len(todoDataframe)):
-        fixTags(i)
+        fixTag(i)
     
     while True:
         task = input("Type 'view' to see your to-do list. Type 'add' to add a task. Type 'delete' to remove a task. Type 'sort' to sort the list. Type 'tags' to edit tags.\n")
