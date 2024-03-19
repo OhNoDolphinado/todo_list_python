@@ -104,7 +104,7 @@ def askDesc():
 def tagsToList(): # iterates through dataframe and changes all tag cells to lists
     global todoDataframe
     
-    for i in range(len(todoDataframe)):    
+    for i in range(len(todoDataframe)):
         newCell = todoDataframe.iat[i, 3]
         newCell = newCell.replace("['", "")
         newCell = newCell.replace("']", "")
@@ -124,27 +124,47 @@ def importTags(): # scrapes through the dataframe and grabs all tags
 def editTag(tags):
     task = input("Type 'create' to make a new tag. Type 'add' to add a tag to an item. Type 'delete' to remove a tag from an item.\n")
     task = task.lower()
-    
-    tag = input(f"Please type the name of the tag you'd like to {task}:\n")
-    
+
     match task:
-            case "create":
-                createTag(tag)
-            case "add":
-                addTag(tag)
-            case "delete":
-                deleteTag(tag)
-            case _:
-                print("Invalid command.")
-            
-def createTag():
-    pass    
+        case "create":
+            createTag(tags)
+        case "add":
+            addTag(tags)
+        case "delete":
+            deleteTag(tags)
+        case _:
+            print("Invalid command.")
+                
+def createTag(tags):
+    global todoDataframe
 
-def addTag():
-    itemToTag = input("What's the name of the item you'd like to add a tag to?\n")
+    tag = input(f"Please type the name of your new tag:\n")
+    tag = tag.lower()   
 
-def deleteTag():
+def addTag(tags):
+    global todoDataframe
+
     pass
+
+def deleteTag(tags):
+    global todoDataframe
+
+    # redo this lmao
+
+    # print(f"Current tags are: {tags}")
+    # tag = input(f"Please type the name of the tag you'd like to delete:\n")
+    # if tag not in tags:
+    #     print("Tag not found.")
+    #     return
+    # else:
+    #     # replace cells with lists containing the tag with a list not containing the tag
+    #     for row in range(len(todoDataframe)):
+    #         if tag in todoDataframe.iat[row, 3]:
+    #             todoDataframe.iat[row, 3] = todoDataframe.iat[row, 3].remove(tag)
+    #             if todoDataframe.iat[row, 3] == None:
+    #                 todoDataframe.iat[row, 3] = ['[]']
+
+    #     tags.remove(tag)
 
 # THE FUNCTION NEEDS TO:
 # - take an input
@@ -201,7 +221,6 @@ def deleteTag():
 try:
     
     todoDataframe = pd.read_csv('todo.csv')
-    
     headers = ["task_name", "rating", "body_text", "tags"]
     
     if(isHeaderCorrect(headers) == False):
