@@ -1,10 +1,6 @@
 task_name,rating,body_text,tags
-hhello,3,world,
-hewwo,3,hewaloew,"['sup', 'yep']"
-Very important task,5,This task is very important,
-Switch keyboard,1,"Your keyboard broke, go fix it",
-Heyo,3,Global,
-Henlo,3,"World, hello",
-Code project,4,stop being lazy and code,
-Code at home,3,Finish the goddamn project,['Hello']
-Add tags,2,Add tags!!,['Hello']
+Practice piano,1,Finish learning two octaves of the Bb major scale,"['artsy', 'academic']"
+Finish coding project,2,Finish writing up the project you're coding,['academic']
+Play guitar,3,Learn the C scale and practice fingerpicking,['artsy']
+Practice drawing,4,Do thirty minutes of figure drawing,['artsy']
+Complete homework,5,Finish your English paper,['academic']

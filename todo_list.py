@@ -9,9 +9,9 @@ TODO:
 - Sort items (done)
    - by name, alphabetically (done)
    - by "star" rating (done)
-- Editing tags
-   - Add a tag
-   - Remove a tag
+- Editing tags (done)
+   - Add a tag (done)
+   - Remove a tag (done)
    - Remove all instances of a tag (done)
 - Go back and comment everything all pretty-like (look at docstrings and type hinting)
 
@@ -31,7 +31,7 @@ def printList():
         starCount = int(row[1])
         stars = starCount * "★"
         spaces = (5-starCount) * " "
-        print(f"{stars}{spaces} | {row[0]} | {row[2]} | TAGS: {row[3]}")
+        print(f"{stars}{spaces} | {row[0]} || {row[2]} -- TAGS: {row[3]}")
     print("")
         
 class NameValidationError(Exception): # custom error for use in addItem()
@@ -172,12 +172,6 @@ def purgeTag(tag):
             
     if not tagExists:
         print("Tag not found.")
-        
-# THE FUNCTION NEEDS TO:
-# - take an input
-# - have a loop
-# - have a conditional (like an if statement)
-# - have calls that run __different__ parts of the code
 
 try:
     
