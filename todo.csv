@@ -1,6 +1,7 @@
 task_name,rating,body_text,tags
-Practice piano,1,Finish learning two octaves of the Bb major scale,"['artsy', 'academic']"
-Finish coding project,2,Finish writing up the project you're coding,['academic']
-Play guitar,3,Learn the C scale and practice fingerpicking,['artsy']
-Practice drawing,4,Do thirty minutes of figure drawing,['artsy']
 Complete homework,5,Finish your English paper,['academic']
+Practice drawing,4,Do thirty minutes of figure drawing,['artsy']
+Play guitar,3,Learn the C scale and practice fingerpicking,['artsy']
+Bake cookies,3,Make cookies for the theater bake sale,
+Finish coding project,2,Finish writing up the project you're coding,['academic']
+Practice piano,1,Finish learning two octaves of the Bb major scale,"['artsy', 'academic']"
