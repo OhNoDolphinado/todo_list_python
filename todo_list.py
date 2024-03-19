@@ -6,15 +6,13 @@ TODO:
 - View list (done)
 - Add items (done)
 - Remove items (done)
-- Sort items
+- Sort items (done)
    - by name, alphabetically (done)
    - by "star" rating (done)
-   - by tags
-- Add / remove tags
-   - Adding a tag means iterating over the list and editing the list
-- Clean data as it enters (escape chars on commas, etc) (inside addItem()) (not needed)
-- Go back and comment everything all pretty-like (look at docstrings and type hinting)
-
+- Editing tags (done)
+   - Add a tag (done)
+   - Remove a tag (done)
+   - Remove all instances of a tag (done)
 '''
 
 import pandas as pd
@@ -31,7 +29,7 @@ def printList():
         starCount = int(row[1])
         stars = starCount * "★"
         spaces = (5-starCount) * " "
-        print(f"{stars}{spaces} | {row[0]} | {row[2]} | TAGS: {row[3]}")
+        print(f"{stars}{spaces} | {row[0]} || {row[2]} -- TAGS: {row[3]}")
     print("")
         
 class NameValidationError(Exception): # custom error for use in addItem()
@@ -63,7 +61,7 @@ def addItem():
     
     descripton = input("Description: ")
     
-    answers = [taskName, rating, descripton, []]
+    answers = [taskName, rating, descripton, None]
     
     todoDataframe.loc[len(todoDataframe)] = answers
     
@@ -76,16 +74,13 @@ def removeItem():
 def sortList():
     global todoDataframe # required to edit todoDataFrame value
     
-    sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating', 'tags')\n")
+    sortingParameter = input("What would you like to sort by?\n(Options are: 'name', 'rating')\n")
     ascDesc = askDesc()
     match sortingParameter:
         case "name":
             sortingParameter = "task_name"
         case "rating":
             sortingParameter = "rating"
-        case "tags":
-            print("sorting by tags isnt programmed yet lmao")
-            return
         case _:
             print("Not a valid sorting type.")
             return
@@ -101,122 +96,80 @@ def askDesc():
             ascDesc = True
     return ascDesc
     
-def tagsToList(): # iterates through dataframe and changes all tag cells to lists
+def fixTag(index): # iterates through dataframe and changes all tag cells to lists
     global todoDataframe
     
-    for i in range(len(todoDataframe)):
-        newCell = todoDataframe.iat[i, 3]
+    if (isinstance(todoDataframe.iat[index, 3], str)):  
+        newCell = todoDataframe.iat[index, 3]
         newCell = newCell.replace("['", "")
         newCell = newCell.replace("']", "")
         newCell = newCell.split("', '")
 
-        todoDataframe.iat[i, 3] = newCell
+        todoDataframe.iat[index, 3] = newCell
+    elif (isinstance(todoDataframe.iat[index, 3], list) and len(todoDataframe.iat[index, 3]) > 0):
+        return
+    else:
+        todoDataframe.iat[index, 3] = None
 
-def importTags(): # scrapes through the dataframe and grabs all tags
-
-    tags = []
-    for row in range(len(todoDataframe)):
-        for j in todoDataframe.iat[row, 3]:
-            if j not in tags and j != "[]":
-                tags.append(j)
-    return tags
-
-def editTag(tags):
-    task = input("Type 'create' to make a new tag. Type 'add' to add a tag to an item. Type 'delete' to remove a tag from an item.\n")
+def editTag():
+    task = input("Type 'add' to add a tag to an item. Type 'delete' to remove a tag from an item. Type 'purge' to remove all instances of a tag.\n")
     task = task.lower()
-
+    
     match task:
-        case "create":
-            createTag(tags)
-        case "add":
-            addTag(tags)
-        case "delete":
-            deleteTag(tags)
-        case _:
-            print("Invalid command.")
-                
-def createTag(tags):
-    global todoDataframe
+            case "add":
+                name = input("Please type the name of the item you'd like to add a tag to:\n")
+                tag = input("Please type the tag you'd like to add:\n")
+                addTag(name, tag)
+            case "delete":
+                name = input("Please type the name of the item you'd like to remove a tag from:\n")
+                tag = input("Please type the tag you'd like to delete:\n")
+                deleteTag(name, tag)
+            case "purge":
+                tag = input("Please type the tag you'd like to remove entirely:\n")
+                purgeTag(tag)
+            case _:
+                print("Invalid command.")
 
-    tag = input(f"Please type the name of your new tag:\n")
-    tag = tag.lower()   
-
-def addTag(tags):
-    global todoDataframe
-
-    pass
-
-def deleteTag(tags):
-    global todoDataframe
-
-    # redo this lmao
-
-    # print(f"Current tags are: {tags}")
-    # tag = input(f"Please type the name of the tag you'd like to delete:\n")
-    # if tag not in tags:
-    #     print("Tag not found.")
-    #     return
-    # else:
-    #     # replace cells with lists containing the tag with a list not containing the tag
-    #     for row in range(len(todoDataframe)):
-    #         if tag in todoDataframe.iat[row, 3]:
-    #             todoDataframe.iat[row, 3] = todoDataframe.iat[row, 3].remove(tag)
-    #             if todoDataframe.iat[row, 3] == None:
-    #                 todoDataframe.iat[row, 3] = ['[]']
-
-    #     tags.remove(tag)
-
-# THE FUNCTION NEEDS TO:
-# - take an input
-# - have a loop
-# - have a conditional (like an if statement)
-# - have calls that run __different__ parts of the code
-
-# for add:
-# ask two things: name of item to edit, and tags
-# parse tag(s) into list
-# find tags cell in dataframe
-# append new tags to the tags cell
-
-# for remove:
-# ask one thing: name of item to edit
-# find tags cell in dataframe
-# remove tag from the tags cell
-
-# def editTags():
-#     # item = input("Which item would you like to add a tag to?\n")
-#     # if (not(itemInColumn(0, item))): # figure out how to make this ensure the item you're looking for actually exists
-#     #     print("Item not found.")
-#     #     return
-#     task = input("Would you like to add tags ('add'), or remove some ('delete')?\n")
-#     if task == "add":
-#         addRemoveTags("add")
-#     elif task == "delete":
-#         addRemoveTags("delete")
-#     else:
-#         print("Not a valid command.")
-
-# def addRemoveTags(mode):
-#     tagsToBeEdited = input(f"What tags would you like to {mode}? (Delinate with ', ' -- ex. earth, wind, fire)\n")
-#     tagsToBeEdited = tagsToBeEdited.split(", ")
+def addTag(name, tag):
+    try:
+        rowIndex = todoDataframe.index[todoDataframe["task_name"] == name].tolist()[0]
+    except IndexError: # if a name that doesn't exist is passed in
+        print("Invalid name. Please try again.")
+        return
     
-#     temp2DList = todoDataframe.values
+    if isinstance(todoDataframe.iat[rowIndex, 3], list):
+        todoDataframe.iat[rowIndex, 3].append(tag)
+    elif not isinstance(todoDataframe.iat[rowIndex, 3], list):
+        todoDataframe.iat[rowIndex, 3] = [tag]
+
+def deleteTag(name, tag):
+    try:
+        rowIndex = todoDataframe.index[todoDataframe["task_name"] == name].tolist()[0]
+    except IndexError: # if a name that doesn't exist is passed in
+        print("Invalid name. Please try again.")
+        return
     
-#     for tag in tagsToBeEdited:
-#         for i in range(len(temp2DList[0])):
-#             temp2DList[i][3] = convertCellToList(temp2DList[i][3])
-#             if (mode == "add"):
-#                 temp2DList[i][3].append(tag)
-#             elif (mode == "delete"):
-#                 temp2DList[i][3].remove(tag)
-#             todoDataframe.iat[i, 3] = temp2DList[i][3] # figure out how to make this copy our new list into the dataframe cell
+    if isinstance(todoDataframe.iat[rowIndex, 3], list):
+        try:
+            todoDataframe.iat[rowIndex, 3].remove(tag)
+        except:
+            print("Tag not found.")
+    else:
+        print("Tag not found.")
     
-# def convertCellToList(item): # converts strings in the csv that should be lists into lists
-#     if isinstance(item, str):
-#         item = item.replace("[", "")
-#         item = item.replace("]", "")
-#         item = item.split(", ")
-#     return item
+    fixTag(rowIndex)
+
+def purgeTag(tag):
+    tagExists = False # boolean flag for tracking if the tag actually exists
+    
+    for i in range(len(todoDataframe)):
+        if isinstance(todoDataframe.iat[i, 3], list) and tag in todoDataframe.iat[i, 3]: # checks if cell is a list and has the requested tag
+            todoDataframe.iat[i, 3].remove(tag) # remove the tag from the list int the cell
+            tagExists = True 
+            fixTag(i) # converts None to list at the edited cell for consistency's sake
+            
+    if not tagExists:
+        print("Tag not found.")
 
 try:
     
@@ -226,9 +179,8 @@ try:
     if(isHeaderCorrect(headers) == False):
         fixHeader(headers)
     
-    tagsToList()
-    availableTags = importTags()
-    print(availableTags)
+    for i in range(len(todoDataframe)):
+        fixTag(i)
     
     while True:
         task = input("Type 'view' to see your to-do list. Type 'add' to add a task. Type 'delete' to remove a task. Type 'sort' to sort the list. Type 'tags' to edit tags.\n")
@@ -244,7 +196,7 @@ try:
             case "sort":
                 sortList()
             case "tags":
-                editTag(availableTags)
+                editTag()
             case _:
                 print("Invalid command.")
                 

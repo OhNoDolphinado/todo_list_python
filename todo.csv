@@ -1,9 +1,7 @@
 task_name,rating,body_text,tags
-Very important task,5,This task is very important,['[]']
-Code project,4,stop being lazy and code,"['Hello', 'world']"
-Code at home,3,Finish the goddamn project,['Eyo']
-Henlo,3,"World, hello",['[]']
-hewwo,3,hewaloew,['[]']
-Heyo,3,Global,['[]']
-Add tags,2,Add tags!!,['[]']
-Switch keyboard,1,"Your keyboard broke, go fix it",['[]']
+Complete homework,5,Finish your English paper,['academic']
+Practice drawing,4,Do thirty minutes of figure drawing,['artsy']
+Play guitar,3,Learn the C scale and practice fingerpicking,['artsy']
+Bake cookies,3,Make cookies for the theater bake sale,
+Finish coding project,2,Finish writing up the project you're coding,['academic']
+Practice piano,1,Finish learning two octaves of the Bb major scale,"['artsy', 'academic']"
